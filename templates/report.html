@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Interview Evaluation Report</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+            padding: 20px;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            font-weight: 600;
+        }
+
+        .company-badge {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-size: 1.1em;
+            display: inline-block;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+
+        .score-section {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .score-circle {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3em;
+            font-weight: bold;
+            margin: 0 auto 20px;
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+            border: 5px solid white;
+        }
+
+        .score-label {
+            font-size: 1.2em;
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .score-text {
+            font-size: 1.5em;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .section-title {
+            font-size: 1.8em;
+            margin-bottom: 25px;
+            color: #333;
+            border-left: 5px solid #667eea;
+            padding-left: 15px;
+        }
+
+        .feedback-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .feedback-section {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .strengths-box, .weaknesses-box {
+            padding: 25px;
+            border-radius: 15px;
+        }
+
+        .strengths-box {
+            background: linear-gradient(135deg, #d4edda, #c3e6cb);
+            border-left: 5px solid #28a745;
+        }
+
+        .weaknesses-box {
+            background: linear-gradient(135deg, #f8d7da, #f5c6cb);
+            border-left: 5px solid #dc3545;
+        }
+
+        .feedback-title {
+            font-size: 1.4em;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .strengths-box .feedback-title {
+            color: #155724;
+        }
+
+        .weaknesses-box .feedback-title {
+            color: #721c24;
+        }
+
+        .feedback-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .feedback-item {
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+            line-height: 1.6;
+        }
+
+        .feedback-item:last-child {
+            border-bottom: none;
+        }
+
+        .chart-container {
+            height: 400px;
+            margin: 30px 0;
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .recommendations {
+            background: linear-gradient(135deg, #fff3cd, #ffeaa7);
+            border-left: 5px solid #ffc107;
+            padding: 25px;
+            border-radius: 15px;
+            margin-top: 20px;
+        }
+
+        .recommendations-title {
+            color: #856404;
+            font-size: 1.4em;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .recommendation-item {
+            background: rgba(255, 255, 255, 0.7);
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 10px;
+            transition: transform 0.2s ease;
+        }
+
+        .recommendation-item:hover {
+            transform: translateX(5px);
+        }
+
+        .restart-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 18px 40px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1em;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+            margin-top: 30px;
+        }
+
+        .restart-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(102, 126, 234, 0.6);
+        }
+
+        .btn-container {
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        .performance-badge {
+            display: inline-block;
+            padding: 8px 20px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-radius: 20px;
+            font-weight: 600;
+            margin-top: 15px;
+            font-size: 0.9em;
+        }
+
+        .score-breakdown {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .breakdown-item {
+            text-align: center;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            transition: transform 0.2s ease;
+        }
+
+        .breakdown-item:hover {
+            transform: translateY(-3px);
+        }
+
+        .breakdown-value {
+            font-size: 2em;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+
+        .breakdown-label {
+            color: #666;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Interview Evaluation Report</h1>
+            <div class="company-badge">
+                {{ company }} - {{ role }}
+            </div>
+        </div>
+
+        <div class="card score-section">
+            <div class="score-circle">
+                {{ report.overall_score }}/10
+            </div>
+            <div class="score-label">Overall Performance Score</div>
+            <div class="score-text">
+                {% if report.overall_score >= 8 %}
+                    Excellent Performance 🎉
+                {% elif report.overall_score >= 6 %}
+                    Good Performance 👍
+                {% else %}
+                    Needs Improvement 📈
+                {% endif %}
+            </div>
+            <div class="performance-badge">
+                {% if report.overall_score >= 8 %}
+                    Top Candidate
+                {% elif report.overall_score >= 6 %}
+                    Strong Candidate
+                {% else %}
+                    Development Needed
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="card">
+            <h2 class="section-title">Technical Skills Breakdown</h2>
+            <div class="chart-container">
+                <canvas id="skillsChart"></canvas>
+            </div>
+
+            <div class="score-breakdown">
+                <div class="breakdown-item">
+                    <div class="breakdown-value">{{ report.topic_scores.technical_knowledge }}/10</div>
+                    <div class="breakdown-label">Technical Knowledge</div>
+                </div>
+                <div class="breakdown-item">
+                    <div class="breakdown-value">{{ report.topic_scores.problem_solving }}/10</div>
+                    <div class="breakdown-label">Problem Solving</div>
+                </div>
+                <div class="breakdown-item">
+                    <div class="breakdown-value">{{ report.topic_scores.communication }}/10</div>
+                    <div class="breakdown-label">Communication</div>
+                </div>
+                <div class="breakdown-item">
+                    <div class="breakdown-value">{{ report.topic_scores.code_quality }}/10</div>
+                    <div class="breakdown-label">Code Quality</div>
+                </div>
+                <div class="breakdown-item">
+                    <div class="breakdown-value">{{ report.topic_scores.system_design }}/10</div>
+                    <div class="breakdown-label">System Design</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2 class="section-title">Detailed Feedback</h2>
+            <div class="feedback-section">
+                <div class="strengths-box">
+                    <h3 class="feedback-title">✅ Strengths</h3>
+                    <ul class="feedback-list">
+                        {% for strength in report.strengths[:3] %}
+                            <li class="feedback-item">{{ strength }}</li>
+                        {% else %}
+                            <li class="feedback-item">Strong technical foundation</li>
+                            <li class="feedback-item">Good problem-solving approach</li>
+                            <li class="feedback-item">Clear communication skills</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+
+                <div class="weaknesses-box">
+                    <h3 class="feedback-title">📝 Areas for Improvement</h3>
+                    <ul class="feedback-list">
+                        {% for weakness in report.weaknesses[:3] %}
+                            <li class="feedback-item">{{ weakness }}</li>
+                        {% else %}
+                            <li class="feedback-item">Could provide more detailed technical explanations</li>
+                            <li class="feedback-item">Need more specific examples from experience</li>
+                            <li class="feedback-item">Could improve system design thinking</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="recommendations">
+            <h3 class="recommendations-title">🚀 Recommendations for Growth</h3>
+            <div class="recommendation-item">Practice system design questions for {{ company }} scale</div>
+            <div class="recommendation-item">Work on optimizing time and space complexity in algorithms</div>
+            <div class="recommendation-item">Gain deeper knowledge of {{ company }}'s technology stack</div>
+            <div class="recommendation-item">Improve technical communication and explanation skills</div>
+            <div class="recommendation-item">Study real-world case studies from {{ company }}'s engineering blog</div>
+        </div>
+
+        <div class="btn-container">
+            <a href="/restart" class="restart-btn">Take Another Interview</a>
+        </div>
+    </div>
+
+    <script>
+        // Safely parse topic_scores into JS
+        const topicScores = JSON.parse(`{{ (report.topic_scores or {}) | tojson | safe }}`);
+
+        const radarLabels = ['Technical Knowledge','Problem Solving','Communication','Code Quality','System Design'];
+        const radarData = [
+            Number(topicScores.technical_knowledge) || 0,
+            Number(topicScores.problem_solving)   || 0,
+            Number(topicScores.communication)     || 0,
+            Number(topicScores.code_quality)      || 0,
+            Number(topicScores.system_design)     || 0
+        ];
+
+        const canvas = document.getElementById('skillsChart');
+        if (canvas && window.Chart) {
+            const ctx = canvas.getContext('2d');
+            new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: radarLabels,
+                    datasets: [{
+                        label: 'Skill Assessment',
+                        data: radarData,
+                        backgroundColor: 'rgba(102, 126, 234, 0.2)',
+                        borderColor: 'rgba(102, 126, 234, 1)',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            suggestedMin: 0,
+                            suggestedMax: 10,
+                            ticks: { stepSize: 2 }
+                        }
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>

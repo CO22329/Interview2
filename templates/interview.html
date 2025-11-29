@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Technical Interview</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Animated background elements */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: moveBackground 20s linear infinite;
+            z-index: 0;
+        }
+
+        @keyframes moveBackground {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.15);
+            overflow: hidden;
+            position: relative;
+            z-index: 1;
+            animation: slideUp 0.6s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 2px, transparent 2px);
+            background-size: 40px 40px;
+            animation: pulse 15s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.6; }
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 12px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .company-info {
+            font-size: 1.15em;
+            opacity: 0.95;
+            margin-bottom: 20px;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            background: rgba(255,255,255,0.15);
+            padding: 8px 20px;
+            border-radius: 25px;
+            backdrop-filter: blur(10px);
+        }
+
+        .company-info::before {
+            content: '🏢';
+            font-size: 1.2em;
+        }
+
+        .progress-container {
+            margin: 25px 0 15px;
+            position: relative;
+        }
+
+        .progress-bar {
+            background: rgba(255,255,255,0.2);
+            height: 8px;
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .progress {
+            height: 100%;
+            background: linear-gradient(90deg, #fff, #f0f0f0);
+            border-radius: 10px;
+            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 2px 8px rgba(255,255,255,0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { left: -100%; }
+            100% { left: 200%; }
+        }
+
+        .progress-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+
+        .header-meta {
+            font-size: 1em;
+            margin-top: 8px;
+            opacity: 0.95;
+            font-weight: 500;
+        }
+
+        .question-section {
+            padding: 50px 40px;
+        }
+
+        .question-badge {
+            display: inline-block;
+            color: #667eea;
+            font-weight: 600;
+            margin-bottom: 20px;
+            font-size: 0.95em;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+            padding: 8px 16px;
+            border-radius: 20px;
+            border: 2px solid rgba(102, 126, 234, 0.2);
+        }
+
+        .question-text {
+            font-size: 1.35em;
+            line-height: 1.7;
+            margin-bottom: 35px;
+            color: #2d3748;
+            background: linear-gradient(135deg, #f8f9ff, #f0f4ff);
+            padding: 30px;
+            border-radius: 16px;
+            border-left: 5px solid #667eea;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.08);
+            font-weight: 500;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .question-text::before {
+            content: '"';
+            position: absolute;
+            top: 10px;
+            left: 15px;
+            font-size: 4em;
+            color: rgba(102, 126, 234, 0.08);
+            font-family: Georgia, serif;
+        }
+
+        .answer-section {
+            margin-top: 30px;
+        }
+
+        .answer-label {
+            display: block;
+            margin-bottom: 16px;
+            font-weight: 600;
+            color: #2d3748;
+            font-size: 1.1em;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .answer-label::before {
+            content: '✍️';
+            font-size: 1.2em;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 220px;
+            padding: 24px;
+            border: 3px solid #e2e8f0;
+            border-radius: 16px;
+            font-size: 1.05em;
+            font-family: 'Inter', 'Segoe UI', sans-serif;
+            resize: vertical;
+            transition: all 0.3s ease;
+            background: #fafbff;
+            color: #2d3748;
+            line-height: 1.7;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1), 0 8px 24px rgba(102, 126, 234, 0.15);
+            background: white;
+        }
+
+        textarea::placeholder {
+            color: #a0aec0;
+        }
+
+        .btn-container {
+            margin-top: 35px;
+            text-align: center;
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 16px 48px;
+            border-radius: 50px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 12px 28px rgba(102, 126, 234, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .submit-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .submit-btn:hover::before {
+            left: 100%;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 16px 36px rgba(102, 126, 234, 0.4);
+        }
+
+        .submit-btn:active {
+            transform: translateY(-1px);
+        }
+
+        .error-message {
+            background: linear-gradient(135deg, #fff0f0, #ffe5e5);
+            color: #c53030;
+            padding: 18px 24px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            border-left: 5px solid #fc8181;
+            box-shadow: 0 4px 12px rgba(197, 48, 48, 0.1);
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            animation: shake 0.4s ease-in-out;
+        }
+
+        .error-message::before {
+            content: '⚠️';
+            font-size: 1.3em;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        .interview-tips {
+            background: linear-gradient(135deg, #f7fafc, #edf2f7);
+            padding: 28px;
+            border-radius: 16px;
+            margin-top: 40px;
+            border-left: 5px solid #667eea;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.05);
+        }
+
+        .tips-title {
+            color: #667eea;
+            margin-bottom: 16px;
+            font-weight: 700;
+            font-size: 1.15em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .tips-title::before {
+            content: '💡';
+            font-size: 1.3em;
+        }
+
+        .tip-item {
+            margin: 12px 0;
+            color: #4a5568;
+            padding-left: 28px;
+            position: relative;
+            line-height: 1.6;
+            font-size: 0.98em;
+        }
+
+        .tip-item::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: #667eea;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        .char-counter {
+            text-align: right;
+            margin-top: 10px;
+            color: #718096;
+            font-size: 0.9em;
+            font-weight: 500;
+        }
+
+        @media (max-width: 600px) {
+            .question-section {
+                padding: 30px 20px;
+            }
+
+            .header h1 {
+                font-size: 1.8em;
+            }
+
+            .question-text {
+                font-size: 1.15em;
+                padding: 20px;
+            }
+
+            .submit-btn {
+                padding: 14px 36px;
+                font-size: 1em;
+            }
+        }
+
+        /* Floating animation for decorative elements */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .floating {
+            animation: float 3s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="header-content">
+                <h1 class="floating">Technical Interview</h1>
+                <div class="company-info">{{ company }} • {{ role }}</div>
+
+                <div class="progress-container">
+                    <div class="progress-bar">
+                        <div class="progress" style="width: {{ progress|int }}%;"></div>
+                    </div>
+                    <div class="progress-stats">
+                        <span>Progress: {{ progress|int }}%</span>
+                        <span>{{ question_number }} of {{ total_questions }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="question-section">
+            {% if error %}
+            <div class="error-message">{{ error }}</div>
+            {% endif %}
+
+            <div class="question-badge">Question {{ question_number }} of {{ total_questions }}</div>
+            <div class="question-text">{{ question }}</div>
+
+            <form method="POST" action="/interview" id="answerForm">
+                <div class="answer-section">
+                    <label for="answer" class="answer-label">Your Answer</label>
+                    <textarea 
+                        id="answer" 
+                        name="answer" 
+                        placeholder="Share your detailed technical answer here. Include examples, reasoning, and best practices..." 
+                        required 
+                        autofocus
+                        oninput="updateCharCount()"
+                    ></textarea>
+                    <div class="char-counter" id="charCounter">0 characters</div>
+                </div>
+
+                <div class="btn-container">
+                    <button type="submit" class="submit-btn">
+                        {% if question_number == total_questions %}
+                            🎯 Finish Interview
+                        {% else %}
+                            Next Question →
+                        {% endif %}
+                    </button>
+                </div>
+            </form>
+            <div class="interview-tips">
+                <div class="tips-title">Pro Interview Tips</div>
+                <div class="tip-item">Be specific and provide real-world examples from your experience</div>
+                <div class="tip-item">Explain your thought process and decision-making clearly</div>
+                <div class="tip-item">Consider scalability, performance, and edge cases in your solutions</div>
+                <div class="tip-item">Mention relevant technologies, frameworks, and industry best practices</div>
+            </div>
+        </div>
+    </div>
+    <script>
+        const textarea = document.getElementById('answer');
+        const charCounter = document.getElementById('charCounter');
+        textarea.addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = Math.max(220, this.scrollHeight) + 'px';
+        });
+        function updateCharCount() {
+            const count = textarea.value.length;
+            charCounter.textContent = `${count} character${count !== 1 ? 's' : ''}`;
+            
+            if (count > 500) {
+                charCounter.style.color = '#38a169';
+            } else if (count > 200) {
+                charCounter.style.color = '#4299e1';
+            } else {
+                charCounter.style.color = '#718096';
+            }
+        }
+        textarea.focus();
+        document.getElementById('answerForm').addEventListener('submit', function(e) {
+            if (textarea.value.trim().length < 50) {
+                e.preventDefault();
+                textarea.style.borderColor = '#fc8181';
+                textarea.focus();
+                
+                setTimeout(() => {
+                    textarea.style.borderColor = '#e2e8f0';
+                }, 2000);
+            }
+        });
+
+        if (window.innerWidth <= 600) {
+            textarea.addEventListener('focus', function() {
+                setTimeout(() => {
+                    this.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }, 300);
+            });
+        }
+    </script>
+</body>
+</html>
