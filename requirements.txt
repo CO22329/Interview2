@@ -14,3 +14,4 @@ google-auth==2.43.0
 protobuf==5.29.5
 grpcio==1.76.0
 
+gunicorn==20.1.0
