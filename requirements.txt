@@ -1,5 +1,6 @@
+
 Flask==3.0.2
-python-dotenv==1.0.1
+python-dotenv==1.1.1
 google-generativeai==0.5.2
-crewai>=1.4.0
+crewai==1.6.1
 gunicorn==20.1.0
